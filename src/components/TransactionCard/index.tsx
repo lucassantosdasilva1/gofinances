@@ -10,12 +10,16 @@ import {
     DateTransaction,
 } from "./styles";
 
+
+
+
 interface Category{
-    name: string;//Salário Mensal
+    name: string;
     icon: string;
 }
 
-interface data {
+export interface TransactionDataProps {
+    type: 'positive'| 'negative'
     title: string;
     amount: string;
     category: Category;
@@ -24,7 +28,7 @@ interface data {
 
 
 interface props {
-    data: data
+    data: TransactionDataProps;
 }
 
 export function TransactionCard( { data } : props)
@@ -32,7 +36,10 @@ export function TransactionCard( { data } : props)
     return(
         <Container>
             <Title>{data.title}</Title>
-            <Amount>{data.amount}</Amount>
+            <Amount type={data.type}>
+                {data.type === 'negative' && '- '}
+                {data.amount}
+            </Amount>
             <Footer>
                 <Category>
                     <Icon name={data.category.icon}/>
