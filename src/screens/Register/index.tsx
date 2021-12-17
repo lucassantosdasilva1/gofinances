@@ -85,29 +85,31 @@ export function Register(){
             return Alert.alert('Selecione a categoria');
         }
 
-        const newData = {
+        const newTransaction = {
             id: String(uuid.v4()),
             name: form.name,
             amount: form.amount,
-            transactionType,
+            type: transactionType,
             category: category.key,
-            // date: new Date()
+            date: new Date()
         }
 
         //armazenando localmente com asyncstorage
         try {
-            const dataKey = '@gofinances:transactions' //"nome da tabela"
+            let dataKey = '@gofinances:transactions' //"nome da tabela"
 
             const dataRecovered = await AsyncStorage.getItem(dataKey);
-            // const currentData = dataRecovered ? JSON.parse(dataRecovered) : []; // O parse tranforma de string pra json
-            const currentData = JSON.parse(dataRecovered);
+            const currentData = dataRecovered ? JSON.parse(dataRecovered) : []; // O parse tranforma de string pra json
 
             
+            
             const dataFormatted = [
-                newData,
-                currentData
+                ...currentData,
+                newTransaction
             ];
 
+ 
+            console.log("dataFormatted", dataFormatted)
             await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));// O string transforma de jason pra string
             Alert.alert("salvo com sucesso");
             
@@ -136,8 +138,10 @@ export function Register(){
 
 
 
-        console.log("passou pelo register", newData);
+        console.log("passou pelo register e armazenou isso: ", newTransaction);
     }
+
+   
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

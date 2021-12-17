@@ -5,7 +5,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { TransactionDataProps } from "../../components/TransactionCard";
 
 interface TransactionProps extends TransactionDataProps{
-    // type: 'up'| 'down'
+    type: "up" | "down"
 }
 
 export const Container = styled.View`
@@ -25,8 +25,7 @@ export const Amount = styled.Text<TransactionProps>`
 
     font-size: ${RFValue(24)}px;
     font-family: ${({theme}) => theme.fonts.regular};
-    color: ${({theme, type}) => 
-    type === 'up' ? theme.colors.success : theme.colors.attention};
+    color: ${({theme, type}) => type === "up" ? theme.colors.success : theme.colors.attention};
 
     margin-top: 2px;
 `;

@@ -32,44 +32,51 @@ export interface DataListProps extends TransactionDataProps{
 
 export function Dashboard(){
 
+    const[data, setData] = useState<DataListProps[]>();
+    console.log("DATA NO INICIOZIN-------------------------------",data);
+
     
 
-    const[data, setData] = useState<DataListProps[]>([]);
-
-    async function loadTransactions(){
+    async function loadTransactions(){ 
         const dataKey = '@gofinances:transactions';//"Transaction é a mesma coisa de nome da tabela"
-        const response = await AsyncStorage.getItem(dataKey);
+        const response = await AsyncStorage.getItem(dataKey); //Recebe o dataKey como string da tabela transactions
         
-        if (response != null) {
-            var transactions = JSON.parse(response)
-        }else {
-           []
+        if (response != null){
+           var transactions = JSON.parse(response) //transforma o response em objeto json e armazena no transactions
+        }
+        else {
+            var transactions = {}
         }
 
-        setData(transactions);
-
-
-        console.log("dataKey: ", response)
        
-        // const transactionFormatted : DataListProps[] = transactions
-        // .map((item : DataListProps) => {
-        //     const amount = Number(item.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'});
+        const transactionFormatted : DataListProps[] = transactions
+        .map((item : DataListProps) => {
+            const amount = Number(item.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'});
 
-        //     // const date =  Intl.DateTimeFormat('pt-BR', {
-        //     //     day: '2-digit',
-        //     //     month: "2-digit",
-        //     //     year: "2-digit",
-        //     // }).format(new Date(item.date))
+            const date =  Intl.DateTimeFormat('pt-BR', {
+                day: '2-digit',
+                month: "2-digit",
+                year: "2-digit",
+            }).format(new Date(item.date))
 
-        //     return {
-        //         id: item.id,
-        //         name: item.name,
-        //         amount: amount,
-        //         type: item.type,
-        //         // category: item.category,
-        //         // date: date
-        //     }
-        // });
+            return {
+                id: item.id,
+                name: item.name,
+                amount: amount,
+                type: item.type,
+                category: item.category,
+                date: date
+            }  
+        });
+
+            console.log("transactionsFormatted", transactionFormatted);
+        
+
+
+        setData(transactionFormatted);//Salva no useState "data" o objeto que esta armazenado em transactions
+
+ 
+        console.log("transactions: ", transactions) //printa o que ta salvo em transactions
 
          async function remove(){
              await AsyncStorage.removeItem(dataKey)
@@ -80,7 +87,7 @@ export function Dashboard(){
    
 
     useEffect(() => {
-        
+         
         loadTransactions();
         console.log("O data(recebendo transactions ) ta vindo assim: ", data)
 
@@ -130,8 +137,7 @@ export function Dashboard(){
                 <Title>Listagem</Title>
                 <TransactionsList
                     data={data}
-                    keyExtractor={data => (data.id)}
-                    renderItem={(data) => (<TransactionCard data = {data}/>)}
+                    renderItem={(item) => (<TransactionCard data = {item}/>)}
                 />
     
             </Transactions>
