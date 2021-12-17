@@ -2,6 +2,9 @@ import React from 'react';
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components';
 
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
+
 import {
   useFonts, //use sao hooks
   Poppins_400Regular,
@@ -10,11 +13,8 @@ import {
 } from '@expo-google-fonts/poppins';
 
 import theme from './src/global/styles/theme';
-import { Register } from './src/screens/Register';
-
-//import { Dashboard } from './src/screens/Dashboard';
-
-
+import { AppRoutes } from './src/routes/app.routes';
+import { NavigationContainer } from '@react-navigation/native'
 
 
 export default function App() {
@@ -29,8 +29,10 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-          <Register/>
-    </ThemeProvider>
+    <NavigationContainer>
+      <ThemeProvider theme={theme}>
+            <AppRoutes/>
+      </ThemeProvider>
+    </NavigationContainer>
   );
 }

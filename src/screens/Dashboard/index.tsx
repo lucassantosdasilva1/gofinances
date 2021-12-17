@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 //import {Feather} from '@expo/vector-icons'
 //import {Text} from "react-native"
 
@@ -11,6 +11,7 @@ import {
     UserName,
     UserGreeting,
     UserWrapper,
+    LogoutButton,
     Icon,
     HighlightCards,
     Transactions,
@@ -22,6 +23,9 @@ import { HighLighCard,  } from "../../components/HighlightCard";
 import { TransactionCard, TransactionDataProps } from "../../components/TransactionCard";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 
+import  AsyncStorage  from "@react-native-async-storage/async-storage";
+import { Text } from "react-native";
+
 export interface DataListProps extends TransactionDataProps{
     id: string;
 }
@@ -29,40 +33,58 @@ export interface DataListProps extends TransactionDataProps{
 export function Dashboard(){
 
     
-    const data : DataListProps[] = [
-    {
-        id: '1',
-        type: 'positive',
-        title: "Desenvolvimento de Site",
-        amount: "R$ 12.000,00",
-        category: {
-            name: 'Vendas',
-            icon: 'dollar-sign'
-        },
-        date: "13/04/2020"
-    },
-    {
-        id: '2',
-        type: 'negative',
-        title: "Hamburgueria Pizzy",
-        amount: "R$ 59,00",
-        category: {
-            name: 'Alimentação',
-            icon: 'coffee'
-        },
-        date: "13/04/2020"
-    },
-    {
-        id: '3',
-        type: 'negative',
-        title: "Aluguel do apartamento",
-        amount: "R$ 1.200,00",
-        category: {
-            name: 'casa',
-            icon: 'home'
-        },
-        date: "13/04/2020"
-    }]
+
+    const[data, setData] = useState<DataListProps[]>([]);
+
+    async function loadTransactions(){
+        const dataKey = '@gofinances:transactions';//"Transaction é a mesma coisa de nome da tabela"
+        const response = await AsyncStorage.getItem(dataKey);
+        
+        if (response != null) {
+            var transactions = JSON.parse(response)
+        }else {
+           []
+        }
+
+        setData(transactions);
+
+
+        console.log("dataKey: ", response)
+       
+        // const transactionFormatted : DataListProps[] = transactions
+        // .map((item : DataListProps) => {
+        //     const amount = Number(item.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'});
+
+        //     // const date =  Intl.DateTimeFormat('pt-BR', {
+        //     //     day: '2-digit',
+        //     //     month: "2-digit",
+        //     //     year: "2-digit",
+        //     // }).format(new Date(item.date))
+
+        //     return {
+        //         id: item.id,
+        //         name: item.name,
+        //         amount: amount,
+        //         type: item.type,
+        //         // category: item.category,
+        //         // date: date
+        //     }
+        // });
+
+         async function remove(){
+             await AsyncStorage.removeItem(dataKey)
+        } 
+        
+    }
+    
+   
+
+    useEffect(() => {
+        
+        loadTransactions();
+        console.log("O data(recebendo transactions ) ta vindo assim: ", data)
+
+    }, []) //hook que carrega o que ta dentro da função ao mesmo tempo que a interface é carregada
 
     return (
         <Container> 
@@ -75,7 +97,9 @@ export function Dashboard(){
                         <UserName>Lucas</UserName>
                     </User>
                 </UserInfo>
-                <Icon name="power"/>
+                <LogoutButton onPress={()=>{}}>
+                    <Icon name="power"/>
+                </LogoutButton>
             </UserWrapper>
             
             </Header>
@@ -106,8 +130,8 @@ export function Dashboard(){
                 <Title>Listagem</Title>
                 <TransactionsList
                     data={data}
-                    keyExtractor={item => (item.id)}
-                    renderItem={({item}) => (<TransactionCard data = {item}/>)}
+                    keyExtractor={data => (data.id)}
+                    renderItem={(data) => (<TransactionCard data = {data}/>)}
                 />
     
             </Transactions>

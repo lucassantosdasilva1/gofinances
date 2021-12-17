@@ -2,8 +2,10 @@ import styled from "styled-components/native";
 import { Feather } from '@expo/vector-icons'
 import { RFValue } from "react-native-responsive-fontsize";
 
-interface TransactionProps {
-    type: 'positive'| 'negative'
+import { TransactionDataProps } from "../../components/TransactionCard";
+
+interface TransactionProps extends TransactionDataProps{
+    // type: 'up'| 'down'
 }
 
 export const Container = styled.View`
@@ -16,15 +18,15 @@ export const Container = styled.View`
 `;
 
 export const Title = styled.Text`
-    font-size: ${RFValue(14)};
+    font-size: ${RFValue(14)}px;
 `;
 
 export const Amount = styled.Text<TransactionProps>`
 
-    font-size: ${RFValue(24)};
+    font-size: ${RFValue(24)}px;
     font-family: ${({theme}) => theme.fonts.regular};
     color: ${({theme, type}) => 
-    type==='positive' ? theme.colors.success : theme.colors.attention};
+    type === 'up' ? theme.colors.success : theme.colors.attention};
 
     margin-top: 2px;
 `;
