@@ -39,7 +39,7 @@ export function CategorySelect(
     return(
         <Container>
             <Header>
-                <Title>Categorya</Title>
+                <Title>Category</Title>
             </Header>
 
             <FlatList

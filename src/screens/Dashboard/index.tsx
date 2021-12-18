@@ -25,18 +25,16 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 
 import  AsyncStorage  from "@react-native-async-storage/async-storage";
 import { Text } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 export interface DataListProps extends TransactionDataProps{
     id: string;
 }
 
 export function Dashboard(){
-
     const[data, setData] = useState<DataListProps[]>();
     console.log("DATA NO INICIOZIN-------------------------------",data);
-
-    
-
+   
     async function loadTransactions(){ 
         const dataKey = '@gofinances:transactions';//"Transaction é a mesma coisa de nome da tabela"
         const response = await AsyncStorage.getItem(dataKey); //Recebe o dataKey como string da tabela transactions
@@ -72,8 +70,12 @@ export function Dashboard(){
             console.log("transactionsFormatted", transactionFormatted);
         
 
-
-        setData(transactionFormatted);//Salva no useState "data" o objeto que esta armazenado em transactions
+        try {
+            setData(transactionFormatted);    
+        } catch (error) {
+            console.log("Deu erro aqui na hora de salvar o dado no Data do dashboard: ", error)
+        }
+        //Salva no useState "data" o objeto que esta armazenado em transactions
 
  
         console.log("transactions: ", transactions) //printa o que ta salvo em transactions
@@ -83,8 +85,6 @@ export function Dashboard(){
         } 
         
     }
-    
-   
 
     useEffect(() => {
          
@@ -132,14 +132,17 @@ export function Dashboard(){
                 
                 />
             </HighlightCards>
-           
+            
             <Transactions>
                 <Title>Listagem</Title>
+                
+                
                 <TransactionsList
-                    data={data}
-                    renderItem={(item) => (<TransactionCard data = {item}/>)}
+                        data={data}
+                        keyExtractor={item => item.id}
+                        renderItem={({item}) => (<TransactionCard data = {item}/>)}
                 />
-    
+
             </Transactions>
            
         </Container>
