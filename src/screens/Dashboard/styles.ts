@@ -89,7 +89,7 @@ export const Transactions = styled.View`
     flex: 1;
     padding: 0 24px;
 
-    margin-top: ${RFPercentage(12)}px;
+    margin-top: ${RFPercentage(6)}px;
 `;
 
 export const Title = styled.Text`
@@ -106,4 +106,10 @@ export const TransactionsList = styled(
         paddingBottom: getBottomSpace()
     }
 })``;
+
+export const LoadingContainer = styled.View`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+`;
 

@@ -63,13 +63,11 @@ export function Register(){
     } = useForm({resolver: yupResolver(schema)}); //o que esse yupresolver vai fazer? Ele vai forçar q o submit siga um padrao para forçar temos que criar um schema
 
     function handleOpenSelectCategoryModal(){
-        setCategoryModalOpen(true);
-        console.log("abrir")
+        setCategoryModalOpen(true); //abrir
     }
 
     function handleCloseSelectCategoryModal(){
-        setCategoryModalOpen(false);
-        console.log("fechar")
+        setCategoryModalOpen(false); //fechar
     }
 
     function handleTransactionsTypesSelect(type: 'up'|'down'){
@@ -109,7 +107,7 @@ export function Register(){
             ];
 
  
-            console.log("dataFormatted", dataFormatted)
+            
             await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));// O string transforma de jason pra string
             Alert.alert("salvo com sucesso");
             
@@ -138,7 +136,7 @@ export function Register(){
 
 
 
-        console.log("passou pelo register e armazenou isso: ", newTransaction);
+        
     }
 
    

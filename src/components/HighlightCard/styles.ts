@@ -13,7 +13,7 @@ export const Container = styled.View<TypeProps>`
     };
 
     width: ${RFValue(300)}px;
-
+    height: ${RFValue(180)}px;
     border-radius: 5px;
 
 
@@ -62,7 +62,7 @@ export const Amount = styled.Text<TypeProps>`
     color: ${({theme, type}) => 
     type === 'total' ? theme.colors.shape : theme.colors.text_dark};
 
-    margin-top: 38px;
+    margin-top: 20px;
     padding-bottom: 0;
 
 `;

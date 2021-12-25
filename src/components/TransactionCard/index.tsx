@@ -31,10 +31,10 @@ interface props {
 }
 
 export function TransactionCard( { data } : props){
-    const category = categories.filter(
+    const [category] = categories.filter(
         item => item.key === data.category
-    )[0];
-    console.log("Data chegando no card",data)
+    );
+    
 
     return(
         <Container>
