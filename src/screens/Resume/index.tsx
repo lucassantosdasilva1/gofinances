@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState}from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ScrollView } from "react-native-gesture-handler";
+
 import {VictoryPie} from "victory-native"
 
 import { HistoryCard } from "../../components/HistoryCard";
