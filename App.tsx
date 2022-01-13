@@ -14,6 +14,9 @@ import {
 } from '@expo-google-fonts/poppins';
 
 import theme from './src/global/styles/theme';
+
+import {AuthProvider} from './src/hooks/auth'
+
 import { NavigationContainer } from '@react-navigation/native'
 
 import { AppRoutes } from './src/routes/app.routes';
@@ -34,7 +37,11 @@ export default function App() {
   <ThemeProvider theme={theme}>
     <NavigationContainer>
             <StatusBar barStyle="light-content"/>    
-            <SignIn/>
+
+            <AuthProvider>
+              <SignIn/>
+            </AuthProvider>
+
     </NavigationContainer>
   </ThemeProvider>
   );
