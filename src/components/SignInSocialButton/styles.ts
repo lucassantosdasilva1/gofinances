@@ -1,7 +1,12 @@
 import styled from "styled-components/native";
 
+import { Platform } from 'react-native'
+
 import { RectButton} from "react-native-gesture-handler";
 import { RFValue } from "react-native-responsive-fontsize";
+
+var margintop = 0;
+!(Platform.OS === 'ios') ? margintop = RFValue(90) : margintop = 0;
 
 export const Button = styled(RectButton)`
     height: ${RFValue(56)}px;
@@ -14,7 +19,10 @@ export const Button = styled(RectButton)`
     flex-direction: row;
 
     margin-bottom: 16px;
-`;
+    margin-top: ${()=> margintop}px;
+    
+    `
+;
 
 export const ImageContainer = styled.View`
     height: 100%;

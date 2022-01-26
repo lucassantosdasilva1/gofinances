@@ -15,7 +15,7 @@ import {
 
 import theme from './src/global/styles/theme';
 
-import {AuthProvider} from './src/hooks/auth'
+import {AuthProvider, useAuth} from './src/hooks/auth'
 
 import { Routes } from './src/routes';
 
@@ -26,7 +26,9 @@ export default function App() {
     Poppins_700Bold
   });
 
-  if(!fontsLoaded) {
+  const { userStorageLoading } = useAuth()
+
+  if(!fontsLoaded || userStorageLoading) {
     return <AppLoading/>
   }
 

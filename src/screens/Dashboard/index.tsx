@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useFocusEffect } from "@react-navigation/core";
-//import {Feather} from '@expo/vector-icons'
-import {ActivityIndicator} from "react-native"
+import {ActivityIndicator, Alert, Text} from "react-native"
 
+import { useFocusEffect } from "@react-navigation/core";
 import {useTheme} from 'styled-components'
+import { useAuth } from '../../hooks/auth'
+
+import  AsyncStorage  from "@react-native-async-storage/async-storage";
 
 import { 
     Container, 
@@ -25,11 +27,7 @@ import {
 
 import { HighLighCard,  } from "../../components/HighlightCard";
 import { TransactionCard, TransactionDataProps } from "../../components/TransactionCard";
-import { getBottomSpace } from "react-native-iphone-x-helper";
 
-import  AsyncStorage  from "@react-native-async-storage/async-storage";
-import { Text } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 
 export interface DataListProps extends TransactionDataProps{
     id: string;
@@ -50,8 +48,20 @@ export function Dashboard(){
     const[isLoading, setIsLoading] = useState<boolean>(true)
     const[transactionsData, setTransactionsData] = useState<DataListProps[]>();
     const[highlightData, sethighlightData] = useState<highLightData>({} as highLightData);
+    const[hasTransactions, setHasTransactions] = useState({})
 
     const theme = useTheme();
+
+    const { signOut, user } = useAuth();
+    
+    async function handleSignOut(){
+        try {
+            await signOut();
+        } catch (error) {
+            console.log(error);
+            Alert.alert('nao foi possivel fazer o LogOut')
+        }
+    }
 
     function getLastTransaction( collection : DataListProps[], type: "up" | "down" ) {
         
@@ -78,14 +88,12 @@ export function Dashboard(){
     }
 
     async function loadTransactions(){ 
-        const dataKey = '@gofinances:transactions';//"Transaction é a mesma coisa de nome da tabela"
+        const dataKey = `@gofinances:transactions_user:${user.id}`;//"Transaction é a mesma coisa de nome da tabela"
         const response = await AsyncStorage.getItem(dataKey); //Recebe o dataKey como string da tabela transactions
         
         let varentriesTotal = 0 // variável que armazena o total das transaçoes de entrada
         let varexpensiveTotal = 0 // variável que armazena o total das transaçoes de saída
         let varTotal = 0 // variável que armazena a diferença entre a entrada e a saída
-
-        
 
         if (response != null){
            var transactions = JSON.parse(response) //transforma o response em objeto json e armazena no transactions
@@ -93,7 +101,7 @@ export function Dashboard(){
         else {
             transactions = {}
         }
-       
+        
         const transactionFormatted : DataListProps[] = transactions
         .map((item : DataListProps) => {
             
@@ -161,25 +169,25 @@ export function Dashboard(){
         setTransactionsData(transactionFormatted);    
         
          // Após a RECUPERAÇÃO DO BANCO (no nosso caso o ASYNCSTORAGE) ele seta o false pra poder a tela de loading sumir e mostrar o app
-        setIsLoading(false);
+         setIsLoading(false);
 
         //Caso precise APAGAR TUDO DO BANCO(ASYNCSTORAGE) É SÓ CHAMAR remove() no final desse async (do lado de fora do {})
         async function remove(){
-            await AsyncStorage.removeItem(dataKey)
+            await AsyncStorage.removeItem(`@gofinances:transactions_user:${user.id}`);
        } 
     }
 
+    //o que está dentro desse hook é carregado simultaneamente junto com o app (na hora que ele inicia)
     // useEffect(() => {
     //     loadTransactions();
-
-    // }, []) //o que está dentro desse hook é carregado simultaneamente junto com o app (na hora que ele inicia)
+    // }, []) 
     
     //esse hook aqui a baixo permite recarregar somente um trecho da tela que no nosso caso é somente o flatlist. O flatlist ta sendo recarregado na hora que inserimos uma nova "linha" de entrada ou de saída
     useFocusEffect(
         useCallback(() => {
             loadTransactions();
             // async function removeTransactions(){
-            //     await AsyncStorage.removeItem("@gofinances:transactions");
+            //     await AsyncStorage.removeItem(`@gofinances:transactions_user:${user.id}`);
             //     console.log("removido");
             // }
 
@@ -201,13 +209,13 @@ export function Dashboard(){
                     <Header>
                     <UserWrapper>
                         <UserInfo>
-                            <Photo source={{ uri: 'https://avatars.githubusercontent.com/u/42879994?v=4' }}/>
+                            <Photo source={{ uri: user.photo }}/>
                             <User>
                                 <UserGreeting>Olá</UserGreeting>
-                                <UserName>Lucas</UserName>
+                                <UserName>{user.name}</UserName>
                             </User>
                         </UserInfo>
-                        <LogoutButton onPress={()=>{}}>
+                        <LogoutButton onPress={handleSignOut}>
                             <Icon name="power"/>
                         </LogoutButton>
                     </UserWrapper>
@@ -239,7 +247,7 @@ export function Dashboard(){
                     <Transactions>
                         <Title>Listagem</Title>
                         
-                        <TransactionsList
+                       <TransactionsList
                                 data={transactionsData}
                                 keyExtractor={item => item.id}
                                 renderItem={({item}) => (<TransactionCard data = {item}/>)}

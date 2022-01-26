@@ -1,19 +1,18 @@
-
-import React, {useEffect, useState, useCallback}from "react";
+import React from "react";
 import { ActivityIndicator } from 'react-native'
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useFocusEffect } from "@react-navigation/native"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
+
+import {useEffect, useState, useCallback} from "react";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { useFocusEffect } from "@react-navigation/native"
+import { useAuth } from "../../hooks/auth";
 
 import {VictoryPie} from "victory-native"
 
 import { addMonths, subMonths, format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-
-
-
 
 import { HistoryCard } from "../../components/HistoryCard";
 
@@ -34,6 +33,7 @@ import { DataListProps } from "../Dashboard";
 import { categories } from "../../categories";
 import { ScrollView } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
+
 
 import theme from "../../global/styles/theme";
 
@@ -56,6 +56,8 @@ export function Resume(){
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [isLoading, setIsLoading] = useState(true);
 
+    const {user} = useAuth()
+
     function handleDateChange(action: 'next' | 'prev' ){
         //quando o usuario clicar para avancar ou retroceder o mes vai aparecer o simbolo de carregando
         setIsLoading(true);
@@ -68,7 +70,7 @@ export function Resume(){
     }
 
     async function loadData(){
-        let dataKey = '@gofinances:transactions' //"nome da tabela"
+        let dataKey = `@gofinances:transactions_user:${user.id}` //"nome da tabela"
 
         const response = await AsyncStorage.getItem(dataKey);
         const responseFormatted = response ? JSON.parse(response) : []; // O parse tranforma de string pra json

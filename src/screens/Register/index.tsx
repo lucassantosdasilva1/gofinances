@@ -13,6 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
  
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../hooks/auth";
 
 import { Button } from "../../components/Forms/Button";
 
@@ -53,6 +54,8 @@ export function Register(){
         name: 'Categoria',
     });
 
+    const {user} = useAuth();
+
     const navigation = useNavigation();
 
     const {
@@ -83,6 +86,7 @@ export function Register(){
             return Alert.alert('Selecione a categoria');
         }
 
+        //Modelo do dado que vai ser salvo no asyncstorage
         const newTransaction = {
             id: String(uuid.v4()),
             name: form.name,
@@ -94,12 +98,11 @@ export function Register(){
 
         //armazenando localmente com asyncstorage
         try {
-            let dataKey = '@gofinances:transactions' //"nome da tabela"
+            let dataKey = `@gofinances:transactions_user:${user.id}` //"nome da tabela"
 
             const dataRecovered = await AsyncStorage.getItem(dataKey);
             const currentData = dataRecovered ? JSON.parse(dataRecovered) : []; // O parse tranforma de string pra json
 
-            
             
             const dataFormatted = [
                 ...currentData,
