@@ -48,7 +48,6 @@ export function Dashboard(){
     const[isLoading, setIsLoading] = useState<boolean>(true)
     const[transactionsData, setTransactionsData] = useState<DataListProps[]>();
     const[highlightData, sethighlightData] = useState<highLightData>({} as highLightData);
-    const[hasTransactions, setHasTransactions] = useState({})
 
     const theme = useTheme();
 
