@@ -79,6 +79,7 @@ function AuthProvider( {children} : AuthProviderProps) {
                     photo: userInfo.picture
                 }
 
+                
                 setUser2(dataUser);
                 console.log("user2: ", user2)
 
