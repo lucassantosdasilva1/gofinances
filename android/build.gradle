@@ -6,6 +6,8 @@ buildscript {
         minSdkVersion = 21
         compileSdkVersion = 30
         targetSdkVersion = 30
+
+        // manifestPlaceholders = [appAuthRedirectScheme: 'https://auth.expo.io/@lucassantosdasilva1/gofinances']
     }
     repositories {
         google()

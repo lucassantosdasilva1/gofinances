@@ -85,6 +85,7 @@ export function Dashboard(){
         let varexpensiveTotal = 0 // variável que armazena o total das transaçoes de saída
         let varTotal = 0 // variável que armazena a diferença entre a entrada e a saída
 
+        
 
         if (response != null){
            var transactions = JSON.parse(response) //transforma o response em objeto json e armazena no transactions
@@ -95,6 +96,7 @@ export function Dashboard(){
        
         const transactionFormatted : DataListProps[] = transactions
         .map((item : DataListProps) => {
+            
             if (item.type === 'up'){
                varentriesTotal += Number(item.amount)
             } else {
@@ -120,7 +122,11 @@ export function Dashboard(){
             }  
         });
 
+
+        //########## AQUI ABAIXO OS DADOS QUE SERÃO PROCESSADOS VÃO PREENCHER OS CARDS DO CARROSSEL OS HIGHLIGHTS
+        //vai buscar a ultima transação de entrada
         const lastTransactionEntries = getLastTransaction(transactions, 'up')
+        //vai buscar a ultima transação de saída
         const lastTransactionExpensives = getLastTransaction(transactions, 'down')
 
         varTotal = varentriesTotal - varexpensiveTotal;
@@ -163,15 +169,21 @@ export function Dashboard(){
        } 
     }
 
-    useEffect(() => {
-        loadTransactions();
+    // useEffect(() => {
+    //     loadTransactions();
 
-    }, []) //o que está dentro desse hook é carregado simultaneamente junto com o app (na hora que ele inicia)
+    // }, []) //o que está dentro desse hook é carregado simultaneamente junto com o app (na hora que ele inicia)
     
     //esse hook aqui a baixo permite recarregar somente um trecho da tela que no nosso caso é somente o flatlist. O flatlist ta sendo recarregado na hora que inserimos uma nova "linha" de entrada ou de saída
     useFocusEffect(
         useCallback(() => {
             loadTransactions();
+            // async function removeTransactions(){
+            //     await AsyncStorage.removeItem("@gofinances:transactions");
+            //     console.log("removido");
+            // }
+
+            // removeTransactions();
         },[])
     );
 
@@ -226,7 +238,6 @@ export function Dashboard(){
                     
                     <Transactions>
                         <Title>Listagem</Title>
-                        
                         
                         <TransactionsList
                                 data={transactionsData}

@@ -72,7 +72,7 @@ export function Resume(){
 
         const response = await AsyncStorage.getItem(dataKey);
         const responseFormatted = response ? JSON.parse(response) : []; // O parse tranforma de string pra json
-        
+
         //Essa variavel armazena todos os gastos(down). Além disso filtra tbm por mes e ano
         const expensives = responseFormatted.filter((expensive :  TransactionData) => 
             expensive.type === 'down' &&
@@ -194,58 +194,6 @@ export function Resume(){
                             />
                         </ChartContainer>
                         
-                        {
-                            totalByCategories.map( item => (
-                                <HistoryCard 
-                                    key={item.key}
-                                    title={item.name}
-                                    amount={item.totalFormatted}
-                                    color={item.color}
-                                />
-                            ))
-                        }
-
-                        {
-                            totalByCategories.map( item => (
-                                <HistoryCard 
-                                    key={item.key}
-                                    title={item.name}
-                                    amount={item.totalFormatted}
-                                    color={item.color}
-                                />
-                            ))
-                        }
-                        {
-                            totalByCategories.map( item => (
-                                <HistoryCard 
-                                    key={item.key}
-                                    title={item.name}
-                                    amount={item.totalFormatted}
-                                    color={item.color}
-                                />
-                            ))
-                        }
-                        {
-                            totalByCategories.map( item => (
-                                <HistoryCard 
-                                    key={item.key}
-                                    title={item.name}
-                                    amount={item.totalFormatted}
-                                    color={item.color}
-                                />
-                            ))
-                        }
-                        {
-                            totalByCategories.map( item => (
-                                <HistoryCard 
-                                    key={item.key}
-                                    title={item.name}
-                                    amount={item.totalFormatted}
-                                    color={item.color}
-                                />
-                            ))
-                        }
-
                         {
                             totalByCategories.map( item => (
                                 <HistoryCard 
